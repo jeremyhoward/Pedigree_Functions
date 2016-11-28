@@ -15,4 +15,5 @@ g++ pedigree_functions.cpp -o pedigreefun
 
 # To Run
 Only need full relationship: "./pedigreefun smallpedigree.txt pedigreesorted fullrelationship"
+
 Need full and subset relationship: "./pedigreefun smallpedigree.txt pedigreesorted fullrelationship subsetids"
