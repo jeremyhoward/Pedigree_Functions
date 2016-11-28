@@ -6,7 +6,6 @@
 #include <iomanip>
 using namespace std;
 
-// Class to store index start and stop site for each chromosome //
 class Pedigree_Class
 {
 private:
