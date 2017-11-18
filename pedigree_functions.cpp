@@ -4,6 +4,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iomanip>
+#include <unordered_map>
 using namespace std;
 
 class Pedigree_Class
@@ -62,7 +63,7 @@ int main(int argc, char* argv[])
     cout <<"|                                       /      \\       |" << endl;
     cout <<"|  Pedigree Relationship Functions     #-/.\\==/.\\      |" << endl;
     cout <<"|  Author: Jeremy T. Howard           (, \\_/ \\\\_/      |" << endl;
-    cout <<"|  Updated: Date: 8/21/2016            |    -`  |      |" << endl;
+    cout <<"|  Updated: Date: 11/18/2017           |    -`  |      |" << endl;
     cout <<"|                                       \\  \\_/ /       |" << endl;
     cout <<"|                                      /`-.__.`        |" << endl;
     cout <<"|                                   .-'`-.___|__       |" << endl;
@@ -177,37 +178,30 @@ int main(int argc, char* argv[])
     /* Algorithm works by proceeding through the pedigree one animal at a time and all animals begin with generation number = 1. */
     /* Take current generation and increase it by 1 and compare m to the generation number of sire and dam. If it is less than sire */
     /* and dam then change DD to generation 2; This was taken from Dr. Schaeffer's Notes. */
-    int orderiteration = 0; int ma = 1;
+    int orderiteration = 0;
     string done = "NO";
     while(done == "NO")
     {
-        orderiteration++;
-        int m1 = 0;
+        orderiteration++; int numberchanged = 0;
         for(int i = 0; i < pedigree.size(); i++)
         {
-            for(int j = 0; j < pedigree.size(); j++)
+            if(pedigree[i].getsire() != "0" | pedigree[i].getdam() != "0")
             {
-                if(pedigree[i].getsire() == pedigree[j].getanim())
+                for(int j = 0; j < pedigree.size(); j++)
                 {
-                    if(pedigree[j].getgener() <= pedigree[i].getgener()){pedigree[j].Update_Generation(pedigree[j].getgener() + 1);}
-                }
-                if(pedigree[i].getdam() == pedigree[j].getanim())
-                {
-                    if(pedigree[j].getgener() <= pedigree[i].getgener()){pedigree[j].Update_Generation(pedigree[j].getgener() + 1);}
+                    if(pedigree[i].getsire() == pedigree[j].getanim())
+                    {
+                        if(pedigree[j].getgener() <= pedigree[i].getgener()){pedigree[j].Update_Generation(pedigree[i].getgener() + 1); numberchanged++;}
+                    }
+                    if(pedigree[i].getdam() == pedigree[j].getanim())
+                    {
+                        if(pedigree[j].getgener() <= pedigree[i].getgener()){pedigree[j].Update_Generation(pedigree[i].getgener() + 1); numberchanged++;}
+                    }
                 }
             }
-            /* find max generation value */
-            for(int i = 0; i < pedigree.size(); i++){if(pedigree[i].getgener() > m1){m1 = pedigree[i].getgener();}}
-            if(m1 != ma){done = "NO";}
-            if(m1 == ma){done = "YES";}
         }
-        //for(int i = 0; i < Orig_Animal.size(); i++)
-        //{
-        //    cout<<pedigree[i].getanim()<<" "<<pedigree[i].getsire()<<" "<<pedigree[i].getdam()<<" "<<pedigree[i].getgener()<<endl;
-        //}
-        //cout << endl;
-        if(orderiteration % 5 == 0){cout << "   - " << orderiteration << endl;}
-        ma=m1;
+        if(orderiteration % 1 == 0){cout << "   - " << orderiteration << " (Changed Generation: " << numberchanged << ")" << endl;}
+        if(numberchanged == 0){done = "YES";}
     }
     sort(pedigree.begin(), pedigree.end(), sortByGen);
     cout << "   - Took " << orderiteration << " iterations of the algorithm to figure out order." << endl;
@@ -261,6 +255,7 @@ int main(int argc, char* argv[])
         }
     }
     //for(int i = 0; i < pedigree.size(); i++)
+    //for(int i = 0; i < 25; i++)
     //{
     //    cout<<renum_animal[i]<<" "<<renum_sire[i]<<" "<<renum_dam[i]<<endl;
     //}
